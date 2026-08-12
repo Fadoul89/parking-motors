@@ -1,0 +1,13 @@
+{
+  "name": "parking-motors",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:mobile": "npm run start --workspace=apps/mobile",
+    "db:up": "docker compose -f apps/web/docker-compose.yml up -d"
+  }
+}

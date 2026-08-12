@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "PARKING MOTORS",
+    "slug": "parking-motors",
+    "scheme": "parkingmotors",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.parkingmotors.app" },
+    "android": { "package": "com.parkingmotors.app" },
+    "plugins": ["expo-router"]
+  }
+}

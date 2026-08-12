@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.env
+.env.local
+.claude/
+apps/web/public/uploads/*
+!apps/web/public/uploads/.gitkeep
+dist/
+.expo/
+*.log

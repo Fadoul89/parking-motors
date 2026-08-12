@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  BUYER
+  SELLER
+}
+
+enum VehicleType {
+  VOITURE_NEUVE
+  OCCASION
+  ZERO_KM
+  SUV
+  MINIBUS
+  PICKUP
+  CAMION
+  MOTO
+  PRO
+}
+
+enum Condition {
+  NEUF
+  OCCASION
+}
+
+enum SaleType {
+  VENTE
+  LOCATION
+}
+
+enum ListingStatus {
+  ACTIVE
+  DISABLED
+  EXPIRED
+}
+
+enum FuelType {
+  ESSENCE
+  DIESEL
+  HYBRIDE
+  ELECTRIQUE
+}
+
+enum Transmission {
+  MANUELLE
+  AUTOMATIQUE
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  role          UserRole
+  createdAt     DateTime       @default(now())
+  sellerProfile SellerProfile?
+  listings      Listing[]
+  favorites     Favorite[]
+}
+
+model SellerProfile {
+  id         String  @id @default(cuid())
+  userId     String  @unique
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nom        String
+  prenom     String
+  telephone  String
+  isPremium  Boolean @default(false)
+}
+
+model Listing {
+  id           String        @id @default(cuid())
+  sellerId     String
+  seller       User          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  title        String
+  brand        String
+  model        String
+  price        Int
+  year         Int
+  mileage      Int
+  fuel         FuelType
+  transmission Transmission
+  vehicleType  VehicleType
+  condition    Condition
+  saleType     SaleType
+  city         String
+  description  String
+  status       ListingStatus @default(ACTIVE)
+  isFlash      Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  expiresAt    DateTime?
+  photos       ListingPhoto[]
+  favoritedBy  Favorite[]
+
+  @@index([city])
+  @@index([brand])
+  @@index([saleType])
+  @@index([vehicleType])
+}
+
+model ListingPhoto {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  order     Int     @default(0)
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  buyerId   String
+  buyer     User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([buyerId, listingId])
+}
