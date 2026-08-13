@@ -17,6 +17,9 @@ export function Header() {
         <Link href="/">Rechercher</Link>
         {!loading && user?.role === "BUYER" && <Link href="/favorites">Favoris</Link>}
         {!loading && user?.role === "SELLER" && <Link href="/dashboard">Mes annonces</Link>}
+        {!loading && user?.role === "SELLER" && (
+          <Link href="/premium">{user.sellerProfile?.isPremium ? "💎 Premium" : "Passer Premium"}</Link>
+        )}
         {!loading && !user && (
           <>
             <Link href="/login">Connexion</Link>

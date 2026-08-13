@@ -18,6 +18,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
   const router = useRouter();
   const thumb = listing.photos[0]?.url;
   const remaining = listing.isFlash && listing.expiresAt ? formatRemaining(listing.expiresAt) : null;
+  const isPremiumSeller = listing.seller?.sellerProfile?.isPremium;
 
   return (
     <Pressable style={styles.card} onPress={() => router.push(`/listing/${listing.id}`)}>
@@ -30,6 +31,11 @@ export function ListingCard({ listing }: { listing: Listing }) {
         {remaining && (
           <View style={styles.flashBadge}>
             <Text style={styles.flashBadgeText}>⚡ {remaining}</Text>
+          </View>
+        )}
+        {isPremiumSeller && (
+          <View style={styles.premiumBadge}>
+            <Text style={styles.flashBadgeText}>💎 Premium</Text>
           </View>
         )}
       </View>
@@ -83,4 +89,13 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   flashBadgeText: { color: "white", fontSize: 10, fontWeight: "800" },
+  premiumBadge: {
+    position: "absolute",
+    bottom: 8,
+    right: 8,
+    backgroundColor: "#7c3aed",
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
 });

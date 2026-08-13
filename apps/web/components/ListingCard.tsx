@@ -25,6 +25,7 @@ function formatRemaining(expiresAt: string): string | null {
 export function ListingCard({ listing }: { listing: Listing }) {
   const thumb = listing.photos[0]?.url;
   const remaining = listing.isFlash && listing.expiresAt ? formatRemaining(listing.expiresAt) : null;
+  const isPremiumSeller = listing.seller?.sellerProfile?.isPremium;
 
   return (
     <Link href={`/listings/${listing.id}`} className="card listing-card">
@@ -36,6 +37,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         )}
         <span className="listing-sale-badge">{SALE_LABEL[listing.saleType] ?? listing.saleType}</span>
         {remaining && <span className="listing-flash-badge">⚡ {remaining}</span>}
+        {isPremiumSeller && <span className="listing-premium-badge">💎 Premium</span>}
         <span className="listing-view-cta">Voir l&apos;annonce</span>
       </div>
       <div className="listing-body">

@@ -11,6 +11,7 @@ export default function RootLayout() {
         <Stack.Screen name="auth/register" options={{ headerTitle: "Créer un compte" }} />
         <Stack.Screen name="dashboard/new" options={{ headerTitle: "Nouvelle annonce" }} />
         <Stack.Screen name="dashboard/[id]" options={{ headerTitle: "Modifier l'annonce" }} />
+        <Stack.Screen name="premium" options={{ headerTitle: "Premium" }} />
       </Stack>
     </AuthProvider>
   );

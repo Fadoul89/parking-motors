@@ -1,4 +1,5 @@
 import type { Listing as PrismaListing, ListingPhoto, SellerProfile, User } from "@prisma/client";
+import { isPremiumActive } from "@/lib/premium";
 
 type ListingWithRelations = PrismaListing & {
   photos: ListingPhoto[];
@@ -16,7 +17,10 @@ export function serializeUser(user: User & { sellerProfile: SellerProfile | null
           nom: user.sellerProfile.nom,
           prenom: user.sellerProfile.prenom,
           telephone: user.sellerProfile.telephone,
-          isPremium: user.sellerProfile.isPremium,
+          isPremium: isPremiumActive(user.sellerProfile.isPremium, user.sellerProfile.premiumExpiresAt),
+          premiumExpiresAt: user.sellerProfile.premiumExpiresAt
+            ? user.sellerProfile.premiumExpiresAt.toISOString()
+            : null,
         }
       : null,
   };
@@ -55,7 +59,10 @@ export function serializeListing(listing: ListingWithRelations) {
                 nom: listing.seller.sellerProfile.nom,
                 prenom: listing.seller.sellerProfile.prenom,
                 telephone: listing.seller.sellerProfile.telephone,
-                isPremium: listing.seller.sellerProfile.isPremium,
+                isPremium: isPremiumActive(
+                  listing.seller.sellerProfile.isPremium,
+                  listing.seller.sellerProfile.premiumExpiresAt
+                ),
               }
             : null,
         }

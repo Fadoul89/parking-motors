@@ -53,6 +53,12 @@ enum Transmission {
   AUTOMATIQUE
 }
 
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
 model User {
   id            String         @id @default(cuid())
   email         String         @unique
@@ -62,16 +68,18 @@ model User {
   sellerProfile SellerProfile?
   listings      Listing[]
   favorites     Favorite[]
+  payments      Payment[]
 }
 
 model SellerProfile {
-  id         String  @id @default(cuid())
-  userId     String  @unique
-  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  nom        String
-  prenom     String
-  telephone  String
-  isPremium  Boolean @default(false)
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nom              String
+  prenom           String
+  telephone        String
+  isPremium        Boolean   @default(false)
+  premiumExpiresAt DateTime?
 }
 
 model Listing {
@@ -111,6 +119,19 @@ model ListingPhoto {
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   url       String
   order     Int     @default(0)
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  sellerId  String
+  seller    User          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  amount    Int
+  phone     String
+  provider  String        @default("AIRTEL_MONEY")
+  status    PaymentStatus @default(PENDING)
+  reference String        @unique
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
 
 model Favorite {

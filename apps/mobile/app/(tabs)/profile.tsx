@@ -31,6 +31,13 @@ export default function ProfileScreen() {
           {user.sellerProfile.prenom} {user.sellerProfile.nom} · {user.sellerProfile.telephone}
         </Text>
       )}
+      {user.role === "SELLER" && (
+        <Pressable style={styles.btnSecondary} onPress={() => router.push("/premium")}>
+          <Text style={styles.btnSecondaryText}>
+            {user.sellerProfile?.isPremium ? "💎 Compte Premium actif" : "Passer Premium"}
+          </Text>
+        </Pressable>
+      )}
       <Pressable style={styles.btnDanger} onPress={logout}>
         <Text style={styles.btnText}>Déconnexion</Text>
       </Pressable>

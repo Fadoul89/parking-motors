@@ -4,6 +4,7 @@ import type {
   ListingInput,
   ListingStatus,
   LoginPayload,
+  PremiumPayment,
   RegisterPayload,
   User,
 } from "./types";
@@ -100,6 +101,14 @@ export function createApiClient(options: ApiClientOptions) {
       }),
     mySellerListings: () =>
       request<{ listings: Listing[] }>("/api/listings/mine"),
+
+    subscribePremium: (phone: string) =>
+      request<{ paymentId: string }>("/api/premium/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ phone }),
+      }),
+    getPremiumPayment: (id: string) =>
+      request<{ payment: PremiumPayment; user: User }>(`/api/premium/payments/${id}`),
 
     listFavorites: () => request<{ listings: Listing[] }>("/api/favorites"),
     addFavorite: (listingId: string) =>

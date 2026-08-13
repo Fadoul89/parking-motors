@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAuth } from "@/lib/auth";
 import { serializeListing } from "@/lib/serialize";
 import { syncExpiredListings } from "@/lib/expireListings";
+import { FREE_SELLER_LISTING_LIMIT, isPremiumActive } from "@/lib/premium";
 import type { Prisma } from "@prisma/client";
 
 const LISTING_INCLUDE = {
@@ -47,7 +48,8 @@ export async function GET(req: NextRequest) {
   const listings = await prisma.listing.findMany({
     where,
     include: LISTING_INCLUDE,
-    orderBy: { createdAt: "desc" },
+    // Les annonces des vendeurs Premium sont mises en avant en première position.
+    orderBy: [{ seller: { sellerProfile: { isPremium: "desc" } } }, { createdAt: "desc" }],
   });
 
   return NextResponse.json({ listings: listings.map(serializeListing) });
@@ -69,6 +71,21 @@ export async function POST(req: NextRequest) {
       { error: "Complétez votre nom, prénom et téléphone avant de publier une annonce" },
       { status: 403 }
     );
+  }
+
+  const isPremium = isPremiumActive(seller.sellerProfile.isPremium, seller.sellerProfile.premiumExpiresAt);
+  if (!isPremium) {
+    const activeListingCount = await prisma.listing.count({
+      where: { sellerId: auth.sub, status: "ACTIVE" },
+    });
+    if (activeListingCount >= FREE_SELLER_LISTING_LIMIT) {
+      return NextResponse.json(
+        {
+          error: `Limite de ${FREE_SELLER_LISTING_LIMIT} annonces atteinte pour un compte gratuit. Passez Premium pour publier davantage.`,
+        },
+        { status: 403 }
+      );
+    }
   }
 
   const body = await req.json().catch(() => null);

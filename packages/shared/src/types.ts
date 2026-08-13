@@ -22,6 +22,16 @@ export interface SellerProfile {
   prenom: string;
   telephone: string;
   isPremium: boolean;
+  premiumExpiresAt?: string | null;
+}
+
+export type PaymentStatus = "PENDING" | "SUCCESS" | "FAILED";
+
+export interface PremiumPayment {
+  id: string;
+  status: PaymentStatus;
+  amount: number;
+  createdAt: string;
 }
 
 export interface User {

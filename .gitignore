@@ -8,3 +8,6 @@ apps/web/public/uploads/*
 dist/
 .expo/
 *.log
+
+# Local Netlify folder
+.netlify

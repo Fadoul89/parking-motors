@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Listing } from "@parking-motors/shared";
 import { api } from "@/lib/apiClient";
+import { useAuth } from "@/context/AuthContext";
 
 const STATUS_LABEL: Record<string, string> = {
   ACTIVE: "Active",
@@ -12,8 +13,10 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const activeCount = listings.filter((l) => l.status === "ACTIVE").length;
 
   async function load() {
     setLoading(true);
@@ -51,6 +54,28 @@ export default function DashboardPage() {
         <Link href="/dashboard/new" className="btn">
           + Nouvelle annonce
         </Link>
+      </div>
+
+      <div className="card" style={{ padding: 16, marginTop: 12, marginBottom: 12 }}>
+        {user?.sellerProfile?.isPremium ? (
+          <p>
+            💎 Compte Premium actif
+            {user.sellerProfile.premiumExpiresAt &&
+              ` jusqu'au ${new Date(user.sellerProfile.premiumExpiresAt).toLocaleDateString("fr-FR")}`}
+          </p>
+        ) : (
+          <p>
+            Compte gratuit ({activeCount}/5 annonces actives) —{" "}
+            <Link href="/premium" style={{ color: "var(--primary)", fontWeight: 600 }}>
+              Passer Premium
+            </Link>{" "}
+            pour plus d&apos;annonces et une meilleure visibilité
+          </p>
+        )}
+        <p style={{ margin: "8px 0 0", color: "#555", fontSize: "0.9rem" }}>
+          Statistiques : {listings.length} annonce{listings.length > 1 ? "s" : ""} au total, {activeCount} active
+          {activeCount > 1 ? "s" : ""}
+        </p>
       </div>
 
       {loading && <p>Chargement…</p>}

@@ -170,6 +170,18 @@ header.site-header nav a:hover {
   border-radius: 999px;
 }
 
+.listing-premium-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #7c3aed;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
 .listing-view-cta {
   position: absolute;
   bottom: 10px;
