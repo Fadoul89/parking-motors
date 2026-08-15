@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { CarLogo } from "@/components/CarLogo";
 
 export function Header() {
   const { user, loading, logout } = useAuth();
@@ -11,7 +12,7 @@ export function Header() {
   return (
     <header className="site-header">
       <Link href="/" className="brand">
-        🚗 PARKING MOTORS
+        <CarLogo /> PARKING MOTORS
       </Link>
       <nav>
         <Link href="/">Rechercher</Link>

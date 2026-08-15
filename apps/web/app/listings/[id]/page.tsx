@@ -17,6 +17,13 @@ const TRANSMISSION_LABEL: Record<string, string> = {
   AUTOMATIQUE: "Automatique",
 };
 
+function maskEmail(email: string): string {
+  const [name, domain] = email.split("@");
+  if (!domain) return email;
+  const visible = name.slice(0, 2);
+  return `${visible}${"*".repeat(Math.max(1, name.length - 2))}@${domain}`;
+}
+
 export default function ListingDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -24,6 +31,9 @@ export default function ListingDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
+  const [offerAmount, setOfferAmount] = useState("");
+  const [offerError, setOfferError] = useState<string | null>(null);
+  const [offerLoading, setOfferLoading] = useState(false);
 
   useEffect(() => {
     api
@@ -52,8 +62,26 @@ export default function ListingDetailPage() {
     }
   }
 
+  async function handleMakeOffer(e: React.FormEvent) {
+    e.preventDefault();
+    if (!listing) return;
+    setOfferLoading(true);
+    setOfferError(null);
+    try {
+      const { listing: updated } = await api.makeOffer(listing.id, Number(offerAmount));
+      setListing(updated);
+      setOfferAmount("");
+    } catch (err) {
+      setOfferError((err as Error).message);
+    } finally {
+      setOfferLoading(false);
+    }
+  }
+
   if (error) return <div className="container error-text">{error}</div>;
   if (!listing) return <div className="container">Chargement…</div>;
+
+  const minOffer = Math.ceil(listing.price * 0.6);
 
   return (
     <div className="container">
@@ -113,6 +141,49 @@ export default function ListingDetailPage() {
           )}
         </div>
       )}
+
+      <div className="card" style={{ padding: 16, marginTop: 20 }}>
+        <h3>Faire une offre</h3>
+        <p style={{ fontSize: "0.85rem", color: "#555" }}>
+          Offre minimum : {minOffer.toLocaleString()} FCFA (60% du prix affiché) — 3 offres max par jour sur cette
+          annonce.
+        </p>
+
+        {user?.role === "BUYER" ? (
+          <form className="stack" onSubmit={handleMakeOffer}>
+            <label>
+              Montant de votre offre (FCFA)
+              <input
+                required
+                type="number"
+                min={minOffer}
+                value={offerAmount}
+                onChange={(e) => setOfferAmount(e.target.value)}
+              />
+            </label>
+            {offerError && <p className="error-text">{offerError}</p>}
+            <button className="btn" type="submit" disabled={offerLoading}>
+              {offerLoading ? "Envoi…" : "Envoyer l'offre"}
+            </button>
+          </form>
+        ) : (
+          <p style={{ color: "#555" }}>Connectez-vous avec un compte acheteur pour faire une offre.</p>
+        )}
+
+        {listing.offers && listing.offers.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <h4>Offres reçues</h4>
+            <ul>
+              {listing.offers.map((offer) => (
+                <li key={offer.id}>
+                  {offer.amount.toLocaleString()} FCFA — {maskEmail(offer.buyer.email)} ·{" "}
+                  {new Date(offer.createdAt).toLocaleString("fr-FR")}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

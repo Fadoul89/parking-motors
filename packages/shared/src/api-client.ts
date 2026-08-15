@@ -101,6 +101,11 @@ export function createApiClient(options: ApiClientOptions) {
       }),
     mySellerListings: () =>
       request<{ listings: Listing[] }>("/api/listings/mine"),
+    makeOffer: (listingId: string, amount: number) =>
+      request<{ listing: Listing }>(`/api/listings/${listingId}/offers`, {
+        method: "POST",
+        body: JSON.stringify({ amount }),
+      }),
 
     subscribePremium: (phone: string) =>
       request<{ paymentId: string }>("/api/premium/subscribe", {

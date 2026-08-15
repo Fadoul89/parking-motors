@@ -69,6 +69,7 @@ model User {
   listings      Listing[]
   favorites     Favorite[]
   payments      Payment[]
+  offers        Offer[]
 }
 
 model SellerProfile {
@@ -106,6 +107,7 @@ model Listing {
   expiresAt    DateTime?
   photos       ListingPhoto[]
   favoritedBy  Favorite[]
+  offers       Offer[]
 
   @@index([city])
   @@index([brand])
@@ -132,6 +134,19 @@ model Payment {
   reference String        @unique
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+}
+
+model Offer {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  amount    Int
+  createdAt DateTime @default(now())
+
+  @@index([listingId])
+  @@index([buyerId, createdAt])
 }
 
 model Favorite {

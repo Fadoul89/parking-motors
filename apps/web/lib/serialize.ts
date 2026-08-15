@@ -1,9 +1,10 @@
-import type { Listing as PrismaListing, ListingPhoto, SellerProfile, User } from "@prisma/client";
+import type { Listing as PrismaListing, ListingPhoto, Offer, SellerProfile, User } from "@prisma/client";
 import { isPremiumActive } from "@/lib/premium";
 
 type ListingWithRelations = PrismaListing & {
   photos: ListingPhoto[];
   seller?: (User & { sellerProfile: SellerProfile | null }) | null;
+  offers?: (Offer & { buyer: User })[];
 };
 
 export function serializeUser(user: User & { sellerProfile: SellerProfile | null }) {
@@ -66,6 +67,16 @@ export function serializeListing(listing: ListingWithRelations) {
               }
             : null,
         }
+      : undefined,
+    offers: listing.offers
+      ? listing.offers
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .map((o) => ({
+            id: o.id,
+            amount: o.amount,
+            createdAt: o.createdAt.toISOString(),
+            buyer: { id: o.buyer.id, email: o.buyer.email },
+          }))
       : undefined,
   };
 }

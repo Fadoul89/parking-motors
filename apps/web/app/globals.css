@@ -34,6 +34,9 @@ header.site-header {
 }
 
 header.site-header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 800;
   font-size: 1.25rem;
   color: white;

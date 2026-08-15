@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Image, Linking, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import type { Listing } from "@parking-motors/shared";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/AuthContext";
@@ -19,6 +19,9 @@ export default function ListingDetailScreen() {
   const [listing, setListing] = useState<Listing | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
+  const [offerAmount, setOfferAmount] = useState("");
+  const [offerError, setOfferError] = useState<string | null>(null);
+  const [offerLoading, setOfferLoading] = useState(false);
 
   useEffect(() => {
     api.getListing(id).then(({ listing }) => setListing(listing));
@@ -41,7 +44,29 @@ export default function ListingDetailScreen() {
     }
   }
 
+  async function handleMakeOffer() {
+    if (!listing) return;
+    setOfferLoading(true);
+    setOfferError(null);
+    try {
+      const { listing: updated } = await api.makeOffer(listing.id, Number(offerAmount));
+      setListing(updated);
+      setOfferAmount("");
+    } catch (e) {
+      setOfferError((e as Error).message);
+    } finally {
+      setOfferLoading(false);
+    }
+  }
+
   if (!listing) return <ActivityIndicator style={{ marginTop: 40 }} />;
+
+  const minOffer = Math.ceil(listing.price * 0.6);
+  function maskEmail(email: string): string {
+    const [name, domain] = email.split("@");
+    if (!domain) return email;
+    return `${name.slice(0, 2)}${"*".repeat(Math.max(1, name.length - 2))}@${domain}`;
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -85,6 +110,44 @@ export default function ListingDetailScreen() {
           )}
         </View>
       )}
+
+      <View style={styles.sellerCard}>
+        <Text style={{ fontWeight: "700" }}>Faire une offre</Text>
+        <Text style={{ fontSize: 12, color: "#555", marginTop: 4 }}>
+          Offre minimum : {minOffer.toLocaleString()} FCFA (60% du prix) — 3 offres max/jour.
+        </Text>
+
+        {user?.role === "BUYER" ? (
+          <>
+            <TextInput
+              style={styles.offerInput}
+              placeholder="Montant de votre offre (FCFA)"
+              keyboardType="numeric"
+              value={offerAmount}
+              onChangeText={setOfferAmount}
+            />
+            {offerError && <Text style={{ color: "#d93025" }}>{offerError}</Text>}
+            <Pressable style={styles.btn} onPress={handleMakeOffer} disabled={offerLoading}>
+              <Text style={styles.btnText}>{offerLoading ? "Envoi…" : "Envoyer l'offre"}</Text>
+            </Pressable>
+          </>
+        ) : (
+          <Text style={{ color: "#555", marginTop: 8 }}>
+            Connectez-vous avec un compte acheteur pour faire une offre.
+          </Text>
+        )}
+
+        {listing.offers && listing.offers.length > 0 && (
+          <View style={{ marginTop: 12 }}>
+            <Text style={{ fontWeight: "700", marginBottom: 4 }}>Offres reçues</Text>
+            {listing.offers.map((offer) => (
+              <Text key={offer.id} style={{ fontSize: 12, color: "#555" }}>
+                {offer.amount.toLocaleString()} FCFA — {maskEmail(offer.buyer.email)}
+              </Text>
+            ))}
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 }
@@ -99,4 +162,12 @@ const styles = StyleSheet.create({
   btnSecondary: { borderWidth: 1, borderColor: "#2563eb", padding: 10, borderRadius: 8, alignItems: "center", marginTop: 12 },
   btnSecondaryText: { color: "#2563eb", fontWeight: "600" },
   sellerCard: { marginTop: 16, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: "#e0e0e0" },
+  offerInput: {
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 8,
+    marginBottom: 8,
+  },
 });

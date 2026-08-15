@@ -48,6 +48,16 @@ export interface ListingPhoto {
   order: number;
 }
 
+export interface Offer {
+  id: string;
+  amount: number;
+  createdAt: string;
+  buyer: {
+    id: string;
+    email: string;
+  };
+}
+
 export interface Listing {
   id: string;
   sellerId: string;
@@ -74,6 +84,7 @@ export interface Listing {
     email: string;
     sellerProfile: SellerProfile | null;
   };
+  offers?: Offer[];
 }
 
 export interface ListingFilters {

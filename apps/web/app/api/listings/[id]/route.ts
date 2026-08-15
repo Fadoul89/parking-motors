@@ -10,12 +10,18 @@ const LISTING_INCLUDE = {
   seller: { include: { sellerProfile: true } },
 } satisfies Prisma.ListingInclude;
 
+const LISTING_DETAIL_INCLUDE = {
+  photos: true,
+  seller: { include: { sellerProfile: true } },
+  offers: { include: { buyer: true } },
+} satisfies Prisma.ListingInclude;
+
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   await syncExpiredListings();
 
   const listing = await prisma.listing.findUnique({
     where: { id: params.id },
-    include: LISTING_INCLUDE,
+    include: LISTING_DETAIL_INCLUDE,
   });
   if (!listing) return NextResponse.json({ error: "Annonce introuvable" }, { status: 404 });
   return NextResponse.json({ listing: serializeListing(listing) });
