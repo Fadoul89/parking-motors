@@ -43,6 +43,12 @@ header.site-header .brand {
   letter-spacing: 0.02em;
 }
 
+header.site-header .brand-logo {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+
 header.site-header nav {
   display: flex;
   gap: 20px;
