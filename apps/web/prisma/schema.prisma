@@ -11,6 +11,7 @@ datasource db {
 enum UserRole {
   BUYER
   SELLER
+  ADMIN
 }
 
 enum VehicleType {
@@ -64,6 +65,7 @@ model User {
   email         String         @unique
   passwordHash  String
   role          UserRole
+  isBlocked     Boolean        @default(false)
   createdAt     DateTime       @default(now())
   sellerProfile SellerProfile?
   listings      Listing[]

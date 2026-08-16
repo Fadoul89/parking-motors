@@ -10,7 +10,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
-    "premium:activate": "tsx scripts/activatePremium.ts"
+    "premium:activate": "tsx scripts/activatePremium.ts",
+    "admin:create": "tsx scripts/createAdmin.ts"
   },
   "dependencies": {
     "@parking-motors/shared": "*",

@@ -9,7 +9,7 @@ export const AUTH_COOKIE = "pm_token";
 
 export interface JwtPayload {
   sub: string;
-  role: "BUYER" | "SELLER";
+  role: "BUYER" | "SELLER" | "ADMIN";
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -32,7 +32,7 @@ export async function signToken(payload: JwtPayload): Promise<string> {
 export async function verifyToken(token: string): Promise<JwtPayload | null> {
   try {
     const { payload } = await jwtVerify(token, getSecret());
-    return { sub: payload.sub as string, role: payload.role as "BUYER" | "SELLER" };
+    return { sub: payload.sub as string, role: payload.role as "BUYER" | "SELLER" | "ADMIN" };
   } catch {
     return null;
   }

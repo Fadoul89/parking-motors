@@ -12,6 +12,7 @@ export function serializeUser(user: User & { sellerProfile: SellerProfile | null
     id: user.id,
     email: user.email,
     role: user.role,
+    isBlocked: user.isBlocked,
     createdAt: user.createdAt.toISOString(),
     sellerProfile: user.sellerProfile
       ? {

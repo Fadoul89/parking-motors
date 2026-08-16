@@ -21,6 +21,9 @@ export async function POST(req: NextRequest) {
   if (!email || !password || !role) {
     return NextResponse.json({ error: "Email, mot de passe et rôle sont requis" }, { status: 400 });
   }
+  if (role !== "BUYER" && role !== "SELLER") {
+    return NextResponse.json({ error: "Rôle invalide" }, { status: 400 });
+  }
 
   if (role === "SELLER" && (!nom || !prenom || !telephone)) {
     return NextResponse.json(

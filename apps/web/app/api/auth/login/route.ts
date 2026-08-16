@@ -16,6 +16,9 @@ export async function POST(req: NextRequest) {
   if (!user || !(await verifyPassword(body.password, user.passwordHash))) {
     return NextResponse.json({ error: "Identifiants incorrects" }, { status: 401 });
   }
+  if (user.isBlocked) {
+    return NextResponse.json({ error: "Ce compte a été bloqué par un administrateur" }, { status: 403 });
+  }
 
   const token = await signToken({ sub: user.id, role: user.role });
   const res = NextResponse.json({ user: serializeUser(user), token });

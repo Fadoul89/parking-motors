@@ -1,4 +1,4 @@
-export type UserRole = "BUYER" | "SELLER";
+export type UserRole = "BUYER" | "SELLER" | "ADMIN";
 
 export type VehicleType =
   | "VOITURE_NEUVE"
@@ -38,6 +38,7 @@ export interface User {
   id: string;
   email: string;
   role: UserRole;
+  isBlocked?: boolean;
   createdAt: string;
   sellerProfile?: SellerProfile | null;
 }
