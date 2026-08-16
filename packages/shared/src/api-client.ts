@@ -121,6 +121,8 @@ export function createApiClient(options: ApiClientOptions) {
     adminListListings: () => request<{ listings: Listing[] }>("/api/admin/listings"),
     adminDeleteListing: (id: string) =>
       request<void>(`/api/admin/listings/${id}`, { method: "DELETE" }),
+    adminToggleSuspend: (id: string) =>
+      request<{ listing: Listing }>(`/api/admin/listings/${id}/suspend`, { method: "POST" }),
 
     listFavorites: () => request<{ listings: Listing[] }>("/api/favorites"),
     addFavorite: (listingId: string) =>

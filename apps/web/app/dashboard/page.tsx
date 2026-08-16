@@ -10,6 +10,7 @@ const STATUS_LABEL: Record<string, string> = {
   ACTIVE: "Active",
   DISABLED: "Désactivée",
   EXPIRED: "Expirée",
+  SUSPENDED: "🚫 Suspendue par un administrateur",
 };
 
 export default function DashboardPage() {
@@ -92,22 +93,28 @@ export default function DashboardPage() {
                 ⚡ Vente Flash{listing.status === "ACTIVE" && listing.expiresAt ? ` · jusqu'au ${new Date(listing.expiresAt).toLocaleString("fr-FR")}` : ""}
               </span>
             )}
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
-              <Link href={`/dashboard/${listing.id}/edit`} className="btn secondary">
-                Modifier
-              </Link>
-              <button className="btn secondary" onClick={() => handleToggle(listing)}>
-                {listing.status === "ACTIVE" ? "Désactiver" : "Réactiver"}
-              </button>
-              {listing.status === "EXPIRED" && (
-                <button className="btn secondary" onClick={() => handleRenew(listing.id)}>
-                  Renouveler
+            {listing.status === "SUSPENDED" ? (
+              <p style={{ fontSize: "0.85rem", color: "#555", marginTop: 8 }}>
+                Cette annonce a été suspendue par un administrateur et ne peut pas être modifiée.
+              </p>
+            ) : (
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                <Link href={`/dashboard/${listing.id}/edit`} className="btn secondary">
+                  Modifier
+                </Link>
+                <button className="btn secondary" onClick={() => handleToggle(listing)}>
+                  {listing.status === "ACTIVE" ? "Désactiver" : "Réactiver"}
                 </button>
-              )}
-              <button className="btn danger" onClick={() => handleDelete(listing.id)}>
-                Supprimer
-              </button>
-            </div>
+                {listing.status === "EXPIRED" && (
+                  <button className="btn secondary" onClick={() => handleRenew(listing.id)}>
+                    Renouveler
+                  </button>
+                )}
+                <button className="btn danger" onClick={() => handleDelete(listing.id)}>
+                  Supprimer
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

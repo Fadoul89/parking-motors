@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuth } from "@/lib/auth";
 import { serializeListing } from "@/lib/serialize";
-import { syncExpiredListings } from "@/lib/expireListings";
+import { syncExpiredListings, syncExpiredPremium } from "@/lib/expireListings";
 import { FREE_SELLER_LISTING_LIMIT, isPremiumActive } from "@/lib/premium";
 import type { Prisma } from "@prisma/client";
 
@@ -13,6 +13,7 @@ const LISTING_INCLUDE = {
 
 export async function GET(req: NextRequest) {
   await syncExpiredListings();
+  await syncExpiredPremium();
 
   const sp = req.nextUrl.searchParams;
   const where: Prisma.ListingWhereInput = { status: "ACTIVE" };

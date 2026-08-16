@@ -6,7 +6,12 @@ import { api } from "@/lib/apiClient";
 import { useAuth } from "@/context/AuthContext";
 
 const ROLE_LABEL: Record<string, string> = { BUYER: "Acheteur", SELLER: "Vendeur", ADMIN: "Admin" };
-const STATUS_LABEL: Record<string, string> = { ACTIVE: "Active", DISABLED: "Désactivée", EXPIRED: "Expirée" };
+const STATUS_LABEL: Record<string, string> = {
+  ACTIVE: "Active",
+  DISABLED: "Désactivée",
+  EXPIRED: "Expirée",
+  SUSPENDED: "🚫 Suspendue",
+};
 
 export default function AdminPage() {
   const { user, loading: authLoading } = useAuth();
@@ -41,6 +46,11 @@ export default function AdminPage() {
   async function handleDeleteListing(id: string) {
     if (!confirm("Supprimer cette annonce ?")) return;
     await api.adminDeleteListing(id);
+    load();
+  }
+
+  async function handleToggleSuspend(id: string) {
+    await api.adminToggleSuspend(id);
     load();
   }
 
@@ -111,7 +121,10 @@ export default function AdminPage() {
                 <td style={{ padding: 8 }}>{l.title}</td>
                 <td style={{ padding: 8 }}>{l.seller?.email}</td>
                 <td style={{ padding: 8 }}>{STATUS_LABEL[l.status] ?? l.status}</td>
-                <td style={{ padding: 8 }}>
+                <td style={{ padding: 8, display: "flex", gap: 8 }}>
+                  <button className="btn secondary" onClick={() => handleToggleSuspend(l.id)}>
+                    {l.status === "SUSPENDED" ? "Réactiver" : "Suspendre"}
+                  </button>
                   <button className="btn danger" onClick={() => handleDeleteListing(l.id)}>
                     Supprimer
                   </button>

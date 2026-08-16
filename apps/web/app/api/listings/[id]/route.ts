@@ -57,8 +57,14 @@ const UPDATABLE_FIELDS = [
 ] as const;
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  const { error } = await requireOwner(req, params.id);
+  const { error, listing: existing } = await requireOwner(req, params.id);
   if (error) return error;
+  if (existing!.status === "SUSPENDED") {
+    return NextResponse.json(
+      { error: "Cette annonce a été suspendue par un administrateur et ne peut pas être modifiée" },
+      { status: 403 }
+    );
+  }
 
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });

@@ -6,3 +6,10 @@ export async function syncExpiredListings() {
     data: { status: "EXPIRED" },
   });
 }
+
+export async function syncExpiredPremium() {
+  await prisma.sellerProfile.updateMany({
+    where: { isPremium: true, premiumExpiresAt: { lt: new Date() } },
+    data: { isPremium: false },
+  });
+}

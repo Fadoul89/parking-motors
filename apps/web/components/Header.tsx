@@ -15,7 +15,7 @@ export function Header() {
         <CarLogo /> PARKING MOTORS
       </Link>
       <nav>
-        <Link href="/">Rechercher</Link>
+        <Link href="/">Accueil</Link>
         {!loading && user?.role === "BUYER" && <Link href="/favorites">Favoris</Link>}
         {!loading && user?.role === "SELLER" && <Link href="/dashboard">Mes annonces</Link>}
         {!loading && user?.role === "SELLER" && (

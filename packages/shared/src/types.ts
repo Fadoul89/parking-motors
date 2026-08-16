@@ -13,7 +13,7 @@ export type VehicleType =
 
 export type Condition = "NEUF" | "OCCASION";
 export type SaleType = "VENTE" | "LOCATION";
-export type ListingStatus = "ACTIVE" | "DISABLED" | "EXPIRED";
+export type ListingStatus = "ACTIVE" | "DISABLED" | "EXPIRED" | "SUSPENDED";
 export type FuelType = "ESSENCE" | "DIESEL" | "HYBRIDE" | "ELECTRIQUE";
 export type Transmission = "MANUELLE" | "AUTOMATIQUE";
 
