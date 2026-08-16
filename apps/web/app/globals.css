@@ -49,6 +49,30 @@ header.site-header .brand-logo {
   display: block;
 }
 
+header.site-header .brand-tagline {
+  display: none;
+  flex-direction: column;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+header.site-header .brand-tagline strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+header.site-header .brand-tagline span {
+  font-size: 0.78rem;
+  color: #cfe8fb;
+  font-weight: 400;
+}
+
+@media (min-width: 760px) {
+  header.site-header .brand-tagline {
+    display: flex;
+  }
+}
+
 header.site-header nav {
   display: flex;
   gap: 20px;
@@ -87,6 +111,49 @@ header.site-header nav a:hover {
 .hero-band p {
   margin: 0;
   opacity: 0.9;
+}
+
+.hero-promos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero-promo-card {
+  flex: 1 1 280px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 16px;
+  color: white;
+}
+
+.hero-promo-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
+.hero-promo-card p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.88rem;
+}
+
+.hero-promo-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.hero-promo-card-link {
+  transition: background 0.15s ease;
+}
+
+.hero-promo-card-link:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .btn {

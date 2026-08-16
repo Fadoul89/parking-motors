@@ -12,6 +12,10 @@ export function Header() {
     <header className="site-header">
       <Link href="/" className="brand">
         <img src="/logo.png" alt="PARKING MOTORS" className="brand-logo" />
+        <span className="brand-tagline">
+          <strong>Trouvez votre prochain véhicule</strong>
+          <span>Achetez, vendez ou louez en toute simplicité.</span>
+        </span>
       </Link>
       <nav>
         <Link href="/">Accueil</Link>

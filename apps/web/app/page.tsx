@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import type { Listing, ListingFilters } from "@parking-motors/shared";
 import { api } from "@/lib/apiClient";
 import { ListingCard } from "@/components/ListingCard";
@@ -78,9 +79,21 @@ export default function HomePage() {
   return (
     <>
       <div className="hero-band">
-        <div className="container wide" style={{ padding: 0 }}>
-          <h1>Trouvez votre prochain véhicule</h1>
-          <p>Achetez, vendez ou louez en toute simplicité.</p>
+        <div className="container wide hero-promos" style={{ padding: 0 }}>
+          <div className="hero-promo-card">
+            <span className="hero-promo-icon">⚡</span>
+            <div>
+              <strong>Vente Flash 24h / 48h</strong>
+              <p>Vendez votre véhicule vite avec une annonce à durée limitée bien visible.</p>
+            </div>
+          </div>
+          <Link href="/premium" className="hero-promo-card hero-promo-card-link">
+            <span className="hero-promo-icon">💎</span>
+            <div>
+              <strong>Devenez vendeur Premium</strong>
+              <p>Plus d&apos;annonces, mise en avant en tête de recherche et badge Premium.</p>
+            </div>
+          </Link>
         </div>
       </div>
 
