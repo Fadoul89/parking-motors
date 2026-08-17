@@ -49,27 +49,23 @@ header.site-header .brand-logo {
   display: block;
 }
 
-header.site-header .brand-tagline {
-  display: none;
-  flex-direction: column;
-  font-weight: 400;
-  letter-spacing: normal;
+header.site-header .brand-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-header.site-header .brand-tagline strong {
-  font-size: 0.95rem;
-  font-weight: 700;
+header.site-header .brand-flag {
+  display: inline-block;
+  animation: flag-float 2.4s ease-in-out infinite;
 }
 
-header.site-header .brand-tagline span {
-  font-size: 0.78rem;
-  color: #cfe8fb;
-  font-weight: 400;
-}
-
-@media (min-width: 760px) {
-  header.site-header .brand-tagline {
-    display: flex;
+@keyframes flag-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-8deg);
   }
 }
 
