@@ -50,14 +50,14 @@ header.site-header .brand-logo {
 }
 
 header.site-header .brand-name {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  white-space: nowrap;
 }
 
 header.site-header .brand-flag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   animation: flag-float 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
 
 @keyframes flag-float {

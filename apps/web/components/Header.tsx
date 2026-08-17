@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { ChadFlag } from "@/components/ChadFlag";
 
 export function Header() {
   const { user, loading, logout } = useAuth();
@@ -12,9 +13,10 @@ export function Header() {
     <header className="site-header">
       <Link href="/" className="brand">
         <img src="/logo.png" alt="PARKING MOTORS" className="brand-logo" />
-        <span className="brand-name">
-          PARKING MOTORS <span className="brand-flag">🇹🇩</span>
+        <span className="brand-flag">
+          <ChadFlag size={72} />
         </span>
+        <span className="brand-name">PARKING MOTORS</span>
       </Link>
       <nav>
         <Link href="/">Accueil</Link>

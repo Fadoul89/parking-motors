@@ -102,6 +102,7 @@ model Listing {
   condition    Condition
   saleType     SaleType
   city         String
+  country      String        @default("Tchad")
   description  String
   status       ListingStatus @default(ACTIVE)
   isFlash      Boolean       @default(false)
