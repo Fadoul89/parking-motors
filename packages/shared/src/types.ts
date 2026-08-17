@@ -74,6 +74,7 @@ export interface Listing {
   condition: Condition;
   saleType: SaleType;
   city: string;
+  country: string;
   description: string;
   status: ListingStatus;
   isFlash: boolean;

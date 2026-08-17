@@ -53,19 +53,35 @@ header.site-header .brand-name {
   white-space: nowrap;
 }
 
+header.site-header .brand-flag-pole {
+  display: inline-flex;
+  align-items: center;
+  perspective: 200px;
+}
+
 header.site-header .brand-flag {
   display: inline-flex;
   align-items: center;
-  animation: flag-float 2.4s ease-in-out infinite;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  transform-origin: left center;
+  animation: flag-wave 1.6s ease-in-out infinite;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.35));
 }
 
-@keyframes flag-float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
+@keyframes flag-wave {
+  0% {
+    transform: rotateY(0deg) skewY(0deg);
+  }
+  25% {
+    transform: rotateY(18deg) skewY(3deg);
   }
   50% {
-    transform: translateY(-4px) rotate(-8deg);
+    transform: rotateY(0deg) skewY(0deg);
+  }
+  75% {
+    transform: rotateY(-18deg) skewY(-3deg);
+  }
+  100% {
+    transform: rotateY(0deg) skewY(0deg);
   }
 }
 

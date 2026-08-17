@@ -13,10 +13,12 @@ export function Header() {
     <header className="site-header">
       <Link href="/" className="brand">
         <img src="/logo.png" alt="PARKING MOTORS" className="brand-logo" />
-        <span className="brand-flag">
-          <ChadFlag size={72} />
-        </span>
         <span className="brand-name">PARKING MOTORS</span>
+        <span className="brand-flag-pole">
+          <span className="brand-flag">
+            <ChadFlag size={64} />
+          </span>
+        </span>
       </Link>
       <nav>
         <Link href="/">Accueil</Link>
