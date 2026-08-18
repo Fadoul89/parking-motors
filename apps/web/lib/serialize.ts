@@ -23,6 +23,7 @@ export function serializeUser(user: User & { sellerProfile: SellerProfile | null
           premiumExpiresAt: user.sellerProfile.premiumExpiresAt
             ? user.sellerProfile.premiumExpiresAt.toISOString()
             : null,
+          isVerified: user.sellerProfile.isVerified,
         }
       : null,
   };
@@ -66,6 +67,7 @@ export function serializeListing(listing: ListingWithRelations) {
                   listing.seller.sellerProfile.isPremium,
                   listing.seller.sellerProfile.premiumExpiresAt
                 ),
+                isVerified: listing.seller.sellerProfile.isVerified,
               }
             : null,
         }

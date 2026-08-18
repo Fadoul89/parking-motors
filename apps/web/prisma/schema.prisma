@@ -84,6 +84,7 @@ model SellerProfile {
   telephone        String
   isPremium        Boolean   @default(false)
   premiumExpiresAt DateTime?
+  isVerified       Boolean   @default(false)
 }
 
 model Listing {

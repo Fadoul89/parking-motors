@@ -125,7 +125,11 @@ export default function ListingDetailPage() {
 
       {listing.seller?.sellerProfile && (
         <div className="card" style={{ padding: 16, marginTop: 20 }}>
-          <h3>Vendeur</h3>
+          <h3>
+            Vendeur
+            {listing.seller.sellerProfile.isVerified && <span title="Vendeur vérifié"> 🔵</span>}
+            {listing.seller.sellerProfile.isPremium && <span title="Vendeur Premium"> 💎</span>}
+          </h3>
           <p>
             {listing.seller.sellerProfile.prenom} {listing.seller.sellerProfile.nom}
           </p>

@@ -116,8 +116,12 @@ export function createApiClient(options: ApiClientOptions) {
       request<{ payment: PremiumPayment; user: User }>(`/api/premium/payments/${id}`),
 
     adminListUsers: () => request<{ users: User[] }>("/api/admin/users"),
+    adminGetUser: (userId: string) =>
+      request<{ user: User; listings: Listing[] }>(`/api/admin/users/${userId}`),
     adminToggleBlock: (userId: string) =>
       request<{ user: User }>(`/api/admin/users/${userId}/block`, { method: "POST" }),
+    adminToggleVerify: (userId: string) =>
+      request<{ user: User }>(`/api/admin/users/${userId}/verify`, { method: "POST" }),
     adminListListings: () => request<{ listings: Listing[] }>("/api/admin/listings"),
     adminDeleteListing: (id: string) =>
       request<void>(`/api/admin/listings/${id}`, { method: "DELETE" }),

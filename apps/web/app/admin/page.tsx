@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Listing, User } from "@parking-motors/shared";
 import { api } from "@/lib/apiClient";
 import { useAuth } from "@/context/AuthContext";
@@ -85,7 +86,13 @@ export default function AdminPage() {
           <tbody>
             {users.map((u) => (
               <tr key={u.id} style={{ borderBottom: "1px solid var(--border)" }}>
-                <td style={{ padding: 8 }}>{u.email}</td>
+                <td style={{ padding: 8 }}>
+                  <Link href={`/admin/users/${u.id}`} style={{ color: "var(--primary)", fontWeight: 600 }}>
+                    {u.email}
+                  </Link>
+                  {u.sellerProfile?.isVerified && <span title="Vendeur vérifié"> 🔵</span>}
+                  {u.sellerProfile?.isPremium && <span title="Vendeur Premium"> 💎</span>}
+                </td>
                 <td style={{ padding: 8 }}>{ROLE_LABEL[u.role] ?? u.role}</td>
                 <td style={{ padding: 8 }}>{u.isBlocked ? "🚫 Bloqué" : "Actif"}</td>
                 <td style={{ padding: 8 }}>

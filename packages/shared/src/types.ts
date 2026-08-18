@@ -23,6 +23,7 @@ export interface SellerProfile {
   telephone: string;
   isPremium: boolean;
   premiumExpiresAt?: string | null;
+  isVerified?: boolean;
 }
 
 export type PaymentStatus = "PENDING" | "SUCCESS" | "FAILED";

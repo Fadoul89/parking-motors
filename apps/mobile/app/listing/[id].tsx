@@ -96,7 +96,11 @@ export default function ListingDetailScreen() {
 
       {listing.seller?.sellerProfile && (
         <View style={styles.sellerCard}>
-          <Text style={{ fontWeight: "700" }}>Vendeur</Text>
+          <Text style={{ fontWeight: "700" }}>
+            Vendeur
+            {listing.seller.sellerProfile.isVerified ? " 🔵" : ""}
+            {listing.seller.sellerProfile.isPremium ? " 💎" : ""}
+          </Text>
           <Text>
             {listing.seller.sellerProfile.prenom} {listing.seller.sellerProfile.nom}
           </Text>
