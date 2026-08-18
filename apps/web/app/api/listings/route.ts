@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
   const brand = sp.get("brand");
   const model = sp.get("model");
   const city = sp.get("city");
+  const country = sp.get("country");
   const priceMin = sp.get("priceMin");
   const priceMax = sp.get("priceMax");
   const year = sp.get("year");
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest) {
   if (brand) where.brand = { contains: brand, mode: "insensitive" };
   if (model) where.model = { contains: model, mode: "insensitive" };
   if (city) where.city = { contains: city, mode: "insensitive" };
+  if (country) where.country = { contains: country, mode: "insensitive" };
   if (year) where.year = Number(year);
   if (fuel) where.fuel = fuel as Prisma.EnumFuelTypeFilter["equals"];
   if (transmission) where.transmission = transmission as Prisma.EnumTransmissionFilter["equals"];
@@ -114,6 +116,14 @@ export async function POST(req: NextRequest) {
 
   const flashHours = body.flashHours === 24 || body.flashHours === 48 ? body.flashHours : null;
 
+  const country = body.country && String(body.country).trim() ? String(body.country).trim() : "Tchad";
+  if (country !== "Tchad" && !isPremium) {
+    return NextResponse.json(
+      { error: "Publier une annonce depuis un autre pays est réservé aux vendeurs Premium" },
+      { status: 403 }
+    );
+  }
+
   const listing = await prisma.listing.create({
     data: {
       sellerId: auth.sub,
@@ -129,6 +139,7 @@ export async function POST(req: NextRequest) {
       condition: body.condition,
       saleType: body.saleType,
       city: body.city,
+      country,
       description: body.description,
       isFlash: !!flashHours,
       expiresAt: flashHours ? new Date(Date.now() + flashHours * 60 * 60 * 1000) : null,

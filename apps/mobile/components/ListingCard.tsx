@@ -47,7 +47,10 @@ export function ListingCard({ listing }: { listing: Listing }) {
         <Text style={styles.subtitle}>
           {listing.brand} {listing.model} · {listing.year}
         </Text>
-        <Text style={styles.subtitle}>{listing.city}</Text>
+        <Text style={styles.subtitle}>
+          {listing.city}
+          {listing.country && listing.country !== "Tchad" ? ` (${listing.country})` : ""}
+        </Text>
         <Text style={styles.price}>{listing.price.toLocaleString()} FCFA</Text>
       </View>
     </Pressable>

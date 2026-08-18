@@ -15,6 +15,7 @@ const emptyForm: ListingInput = {
   condition: "OCCASION",
   saleType: "VENTE",
   city: "",
+  country: "Tchad",
   description: "",
 };
 
@@ -23,11 +24,13 @@ export function ListingForm({
   submitLabel,
   onSubmit,
   showFlashOption = false,
+  isPremiumSeller = false,
 }: {
   initial?: Partial<ListingInput>;
   submitLabel: string;
   onSubmit: (input: ListingInput) => Promise<void>;
   showFlashOption?: boolean;
+  isPremiumSeller?: boolean;
 }) {
   const [form, setForm] = useState<ListingInput>({ ...emptyForm, ...initial });
   const [error, setError] = useState<string | null>(null);
@@ -76,6 +79,18 @@ export function ListingForm({
         onChangeText={(v) => set("mileage", Number(v) || 0)}
       />
       <TextInput style={styles.input} placeholder="Ville" value={form.city} onChangeText={(v) => set("city", v)} />
+      {isPremiumSeller ? (
+        <TextInput
+          style={styles.input}
+          placeholder="Pays (ex: Tchad, Cameroun…)"
+          value={form.country}
+          onChangeText={(v) => set("country", v)}
+        />
+      ) : (
+        <Text style={{ fontSize: 12, color: "#555" }}>
+          Pays : Tchad · 💎 Passez Premium pour publier depuis un autre pays.
+        </Text>
+      )}
 
       <Chips
         label="Vente ou location"

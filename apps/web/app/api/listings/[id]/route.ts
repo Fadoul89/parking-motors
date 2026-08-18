@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAuth } from "@/lib/auth";
 import { serializeListing } from "@/lib/serialize";
 import { syncExpiredListings } from "@/lib/expireListings";
+import { isPremiumActive } from "@/lib/premium";
 import type { Prisma } from "@prisma/client";
 
 const LISTING_INCLUDE = {
@@ -52,6 +53,7 @@ const UPDATABLE_FIELDS = [
   "condition",
   "saleType",
   "city",
+  "country",
   "description",
   "status",
 ] as const;
@@ -76,6 +78,23 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (data.price !== undefined) data.price = Number(data.price);
   if (data.year !== undefined) data.year = Number(data.year);
   if (data.mileage !== undefined) data.mileage = Number(data.mileage);
+
+  if (typeof data.country === "string" && data.country !== "Tchad") {
+    const seller = await prisma.user.findUnique({
+      where: { id: existing!.sellerId },
+      include: { sellerProfile: true },
+    });
+    const isPremium = isPremiumActive(
+      !!seller?.sellerProfile?.isPremium,
+      seller?.sellerProfile?.premiumExpiresAt ?? null
+    );
+    if (!isPremium) {
+      return NextResponse.json(
+        { error: "Publier une annonce depuis un autre pays est réservé aux vendeurs Premium" },
+        { status: 403 }
+      );
+    }
+  }
 
   const listing = await prisma.listing.update({
     where: { id: params.id },

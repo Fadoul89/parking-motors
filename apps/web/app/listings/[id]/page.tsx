@@ -112,6 +112,7 @@ export default function ListingDetailPage() {
         <li>Boîte de vitesse : {TRANSMISSION_LABEL[listing.transmission] ?? listing.transmission}</li>
         <li>État : {listing.condition === "NEUF" ? "Neuf" : "Occasion"}</li>
         <li>Ville : {listing.city}</li>
+        <li>Pays : {listing.country}</li>
         <li>Type : {listing.saleType === "VENTE" ? "Vente" : "Location"}</li>
       </ul>
       <p>{listing.description}</p>

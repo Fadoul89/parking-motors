@@ -16,6 +16,7 @@ const emptyForm: ListingInput = {
   condition: "OCCASION",
   saleType: "VENTE",
   city: "",
+  country: "Tchad",
   description: "",
 };
 
@@ -24,11 +25,13 @@ export function ListingForm({
   submitLabel,
   onSubmit,
   showFlashOption = false,
+  isPremiumSeller = false,
 }: {
   initial?: Partial<ListingInput>;
   submitLabel: string;
   onSubmit: (input: ListingInput) => Promise<void>;
   showFlashOption?: boolean;
+  isPremiumSeller?: boolean;
 }) {
   const [form, setForm] = useState<ListingInput>({ ...emptyForm, ...initial });
   const [error, setError] = useState<string | null>(null);
@@ -154,6 +157,24 @@ export function ListingForm({
         Ville
         <input required value={form.city} onChange={(e) => set("city", e.target.value)} />
       </label>
+      <label>
+        Pays
+        {isPremiumSeller ? (
+          <input
+            required
+            value={form.country}
+            onChange={(e) => set("country", e.target.value)}
+            placeholder="ex: Tchad, Cameroun, France…"
+          />
+        ) : (
+          <input value="Tchad" disabled />
+        )}
+      </label>
+      {!isPremiumSeller && (
+        <p style={{ fontSize: "0.85rem", color: "#555", marginTop: -8 }}>
+          💎 Passez Premium pour publier des annonces depuis un autre pays.
+        </p>
+      )}
       <label>
         Description
         <textarea

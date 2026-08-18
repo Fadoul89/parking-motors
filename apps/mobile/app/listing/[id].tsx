@@ -83,6 +83,7 @@ export default function ListingDetailScreen() {
       <Text>Kilométrage : {listing.mileage.toLocaleString()} km</Text>
       <Text>Carburant : {FUEL_LABEL[listing.fuel] ?? listing.fuel}</Text>
       <Text>Ville : {listing.city}</Text>
+      <Text>Pays : {listing.country}</Text>
       <Text style={{ marginTop: 8 }}>{listing.description}</Text>
 
       {user?.role === "BUYER" && (

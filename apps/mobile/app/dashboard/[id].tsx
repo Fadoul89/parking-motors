@@ -6,10 +6,12 @@ import type { Listing, ListingInput } from "@parking-motors/shared";
 import { api } from "@/lib/api";
 import { ListingForm } from "@/components/ListingForm";
 import { API_BASE_URL } from "@/lib/config";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function EditListingScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { user } = useAuth();
   const [listing, setListing] = useState<Listing | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -75,7 +77,12 @@ export default function EditListingScreen() {
 
       <View style={{ height: 16 }} />
       <Text style={styles.sectionTitle}>Détails de l&apos;annonce</Text>
-      <ListingForm initial={listing} submitLabel="Enregistrer" onSubmit={handleSubmit} />
+      <ListingForm
+        initial={listing}
+        submitLabel="Enregistrer"
+        onSubmit={handleSubmit}
+        isPremiumSeller={!!user?.sellerProfile?.isPremium}
+      />
     </ScrollView>
   );
 }

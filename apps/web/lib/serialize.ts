@@ -44,6 +44,7 @@ export function serializeListing(listing: ListingWithRelations) {
     condition: listing.condition,
     saleType: listing.saleType,
     city: listing.city,
+    country: listing.country,
     description: listing.description,
     status: listing.status,
     isFlash: listing.isFlash,

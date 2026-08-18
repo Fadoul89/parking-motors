@@ -144,6 +144,10 @@ export default function HomePage() {
                 Ville
                 <input placeholder="ex: Libreville" onChange={(e) => update("city", e.target.value)} />
               </label>
+              <label>
+                Pays
+                <input placeholder="ex: Tchad" onChange={(e) => update("country", e.target.value)} />
+              </label>
             </div>
 
             <div className="filters-section">

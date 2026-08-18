@@ -5,10 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import type { Listing, ListingInput } from "@parking-motors/shared";
 import { api } from "@/lib/apiClient";
 import { ListingForm } from "@/components/ListingForm";
+import { useAuth } from "@/context/AuthContext";
 
 export default function EditListingPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { user } = useAuth();
   const [listing, setListing] = useState<Listing | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -69,7 +71,12 @@ export default function EditListingPage() {
         {uploadError && <p className="error-text">{uploadError}</p>}
       </div>
 
-      <ListingForm initial={listing} submitLabel="Enregistrer" onSubmit={handleSubmit} />
+      <ListingForm
+        initial={listing}
+        submitLabel="Enregistrer"
+        onSubmit={handleSubmit}
+        isPremiumSeller={!!user?.sellerProfile?.isPremium}
+      />
     </div>
   );
 }

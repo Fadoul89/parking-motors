@@ -93,6 +93,7 @@ export interface ListingFilters {
   brand?: string;
   model?: string;
   city?: string;
+  country?: string;
   priceMin?: number;
   priceMax?: number;
   year?: number;
@@ -130,6 +131,7 @@ export interface ListingInput {
   condition: Condition;
   saleType: SaleType;
   city: string;
+  country?: string;
   description: string;
   flashHours?: 24 | 48;
 }

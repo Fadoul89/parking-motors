@@ -48,6 +48,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         </span>
         <span className="listing-specs">
           {listing.year} · {listing.mileage.toLocaleString()} km · {listing.city}
+          {listing.country && listing.country !== "Tchad" ? ` (${listing.country})` : ""}
         </span>
         <div className="listing-footer">
           <span className="listing-price">
