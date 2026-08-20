@@ -122,6 +122,13 @@ export function createApiClient(options: ApiClientOptions) {
       request<{ user: User }>(`/api/admin/users/${userId}/block`, { method: "POST" }),
     adminToggleVerify: (userId: string) =>
       request<{ user: User }>(`/api/admin/users/${userId}/verify`, { method: "POST" }),
+    adminActivatePremium: (userId: string, days: 30 | 60 | 90) =>
+      request<{ user: User }>(`/api/admin/users/${userId}/premium`, {
+        method: "POST",
+        body: JSON.stringify({ days }),
+      }),
+    adminDeactivatePremium: (userId: string) =>
+      request<{ user: User }>(`/api/admin/users/${userId}/premium`, { method: "DELETE" }),
     adminListListings: () => request<{ listings: Listing[] }>("/api/admin/listings"),
     adminDeleteListing: (id: string) =>
       request<void>(`/api/admin/listings/${id}`, { method: "DELETE" }),

@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ListingCard } from "@/components/ListingCard";
 
 const ROLE_LABEL: Record<string, string> = { BUYER: "Acheteur", SELLER: "Vendeur", ADMIN: "Admin" };
+const PREMIUM_DAYS_OPTIONS = [30, 60, 90] as const;
 
 export default function AdminUserDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,7 @@ export default function AdminUserDetailPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [premiumDays, setPremiumDays] = useState<(typeof PREMIUM_DAYS_OPTIONS)[number]>(30);
 
   async function load() {
     setLoading(true);
@@ -44,6 +46,17 @@ export default function AdminUserDetailPage() {
 
   async function handleToggleVerify() {
     await api.adminToggleVerify(id);
+    load();
+  }
+
+  async function handleActivatePremium() {
+    await api.adminActivatePremium(id, premiumDays);
+    load();
+  }
+
+  async function handleDeactivatePremium() {
+    if (!confirm("Désactiver le Premium de ce vendeur ?")) return;
+    await api.adminDeactivatePremium(id);
     load();
   }
 
@@ -110,6 +123,32 @@ export default function AdminUserDetailPage() {
             </button>
           )}
         </div>
+
+        {profile.sellerProfile && (
+          <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap", alignItems: "center" }}>
+            {profile.sellerProfile.isPremium ? (
+              <button className="btn danger" onClick={handleDeactivatePremium}>
+                💎 Désactiver le Premium
+              </button>
+            ) : (
+              <>
+                <select
+                  value={premiumDays}
+                  onChange={(e) => setPremiumDays(Number(e.target.value) as (typeof PREMIUM_DAYS_OPTIONS)[number])}
+                >
+                  {PREMIUM_DAYS_OPTIONS.map((d) => (
+                    <option key={d} value={d}>
+                      {d} jours
+                    </option>
+                  ))}
+                </select>
+                <button className="btn secondary" onClick={handleActivatePremium}>
+                  💎 Activer le Premium
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       <h2 style={{ marginTop: 32 }}>Annonces ({listings.length})</h2>
